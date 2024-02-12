@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>React POST Request to API</title>
+  </head>
+  <body>
+    <div id="root"></div>
+
+    
+    <script
+      crossorigin
+      src="https://unpkg.com/react@18/umd/react.development.js"
+    ></script>
+ 
+    <script
+      crossorigin
+      src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"
+    ></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script type="text/babel">
+        //babel transpiler for using jsx
+      const { useState ,useRef } = React;
+
+      // Define the PostDataToApi component
+      function PostDataToApi() {
+        const mobref=useRef();
+        const [headersData, setHeadersData] = useState(null);
+
+        // Function to make POST request
+        const postData = async () => {
+            let  phonenumber=mobref.current.value
+            console.log(phonenumber)
+            
+          try {
+            // API endpoint URL
+            const apiUrl = "https://chimpu.xyz/api/post.php";
+
+            // Data to be sent in the POST request
+            const postData = { phonenumber: phonenumber }; // Replace with the phone number you want to post
+
+            // Options for the fetch request
+            const options = {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify(postData),
+            };
+
+            // Making the POST request
+            const response = await fetch(apiUrl, options);
+            const receivedHeaders = response.headers;
+
+            // Converting headers to object
+            const headersObj = {};
+            for (const [key, value] of receivedHeaders.entries()) {
+              headersObj[key] = value;
+            }
+
+            // Setting the headers data in state
+            setHeadersData(headersObj);
+          } catch (error) {
+            console.error("Error:", error);
+          }
+        };
+
+       
+
+        // Return JSX to render the component
+        return (
+          <div>
+            <input ref={mobref} type="tel"/>
+            <button onClick={postData}>post</button>
+            <h1>Headers Received:</h1>
+            {headersData &&(
+              <p>{JSON.stringify(headersData, null, 2)}</p>
+            ) }
+          </div>
+        );
+      }
+
+      // Render the component
+      ReactDOM.render(<PostDataToApi />, document.getElementById("root"));
+    </script>
+  </body>
+</html>

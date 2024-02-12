@@ -80,7 +80,8 @@
       }
 
       // Render the component
-      ReactDOM.render(<PostDataToApi />, document.getElementById("root"));
+      const root = ReactDOM.createRoot(document.getElementById("root"));
+      root.render(<PostDataToApi />);    
     </script>
   </body>
 </html>
